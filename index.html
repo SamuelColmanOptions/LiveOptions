@@ -13,9 +13,10 @@
       theme: {
         extend: {
           colors: {
-            brand: "#223739",   /* cor mais escura */
-            brand2: "#0F2A29",  /* cor mais clara */
-            texto: "#FFFFFF"
+            brand:  "#0F2A29",  // tudo brand = #0F2A29
+            brand2: "#0F2A29",
+            brand3: "#223739",  // cor antiga pros botões específicos
+            texto:  "#FFFFFF"
           },
           boxShadow: {
             soft: "0 20px 40px rgba(0,0,0,.18)",
@@ -31,17 +32,35 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
 
   <style>
+    /* Header com linha curta */
+    .header { width: 100%; padding-top: 1rem; }
+    .header-content {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding-bottom: 1rem;
+    }
+    .header-line {
+      width: clamp(260px, 55vw, 720px); /* linha responsiva e centralizada */
+      margin: 0.75rem auto 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.22);
+    }
+
+    .font-logo{ font-family: serif; }
+    .e-comercial{ color: #4EA788; }
+    .header-titles-desktop{ font-size: 36px; font-weight: bold; }
     body { font-family: 'Inter', sans-serif; }
-    /* brilho sutil no indicador "AO VIVO" */
+
     .live-indicator::before {
       content: '';
       position: absolute;
       top: 50%; left: 50%;
       transform: translate(-50%, -50%);
       width: 100%; height: 100%;
-      background-color: #ef4444; /* vermelho */
+      background-color: #ef4444;
       border-radius: 9999px;
-      animation: pulse 2s infinite; z-index: -1;
+      animation: pulse 2s infinite;
+      z-index: -1;
     }
     @keyframes pulse {
       0% { transform: translate(-50%, -50%) scale(0.9); opacity: .7; }
@@ -53,13 +72,16 @@
 <body class="bg-brand2 text-texto antialiased min-h-screen flex flex-col">
 
   <!-- Cabeçalho -->
-  <header class="py-6 px-4 sm:px-6 lg:px-8 border-b border-brand2 bg-brand backdrop-blur">
-    <div class="max-w-6xl mx-auto flex justify-between items-center">
+  <header class="header bg-brand">
+    <div class="header-content">
       <!-- LOGO/NOME -->
-      <div class="flex items-center space-x-3">
-        <h1 class="text-2xl font-bold tracking-tight">Options & Company</h1>
+      <div class="header-titles-desktop text-center">
+        <h1 class="font-logo">
+          Options<br><span class="e-comercial">&</span> Company
+        </h1>
       </div>
     </div>
+    <div class="header-line"></div>
   </header>
 
   <!-- Conteúdo Principal -->
@@ -79,17 +101,17 @@
         </iframe>
       </div>
 
-      <!-- Botões de Ação -->
+      <!-- Botões de Ação (mantidos com a cor antiga via brand3) -->
       <div class="mt-8 flex flex-col sm:flex-row justify-center items-center gap-4">
         <a id="btnAbrir" href="#" target="_blank" 
-           class="w-full sm:w-auto flex items-center justify-center gap-3 bg-brand text-white font-bold py-3 px-6 rounded-lg transition-transform duration-300 hover:scale-105 border border-black/10">
+           class="w-full sm:w-auto flex items-center justify-center gap-3 bg-brand3 text-white font-bold py-3 px-6 rounded-lg transition-transform duration-300 hover:scale-105 border border-black/10">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.82m5.84-2.56a16.95 16.95 0 00-2.63-3.07A16.95 16.95 0 009.5 2.52m11.935 11.108c0-6.627-5.373-12-12-12s-12 5.373-12 12 5.373 12 12 12c.58 0 1.15-.042 1.7-.123" />
           </svg>
           <span>Abrir no YouTube</span>
         </a>
         <button onclick="copyLink()" 
-                class="w-full sm:w-auto flex items-center justify-center gap-3 bg-brand hover:bg-brand/90 text-white font-bold py-3 px-6 rounded-lg transition-transform duration-300 hover:scale-105 border border-white/15">
+                class="w-full sm:w-auto flex items-center justify-center gap-3 bg-brand3 hover:bg-brand3/90 text-white font-bold py-3 px-6 rounded-lg transition-transform duration-300 hover:scale-105 border border-white/15">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" />
           </svg>
@@ -99,11 +121,8 @@
     </div>
   </main>
 
-  <!-- Rodapé -->
   <footer class="bg-brand border-t border-brand2 mt-20">
     <div class="max-w-6xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-white/70">
-      <p>&copy; <span id="year"></span> Options & Company. Todos os direitos reservados.</p>
-      <p class="text-sm mt-2">Siga-nos nas redes sociais!</p>
     </div>
   </footer>
 
@@ -136,7 +155,9 @@
       return u;
     }
 
-    document.getElementById('year').textContent = new Date().getFullYear();
+    const y = document.getElementById('year');
+    if (y) y.textContent = new Date().getFullYear();
+
     document.getElementById('btnAbrir').setAttribute('href', LIVE_URL);
 
     const EMBED_URL = toYouTubeEmbed(LIVE_URL);
@@ -147,7 +168,7 @@
       const wrap = document.getElementById('playerWrap');
       wrap.innerHTML = `<div class="w-full h-full grid place-items-center p-6 text-center text-white/80">
         A incorporação deste vídeo está bloqueada pelo proprietário no YouTube.<br/>
-        <a href="${LIVE_URL}" target="_blank" class="inline-block mt-4 bg-brand2 text-black font-semibold py-2 px-4 rounded-lg">Abrir no YouTube</a>
+        <a href="${LIVE_URL}" target="_blank" class="inline-block mt-4 bg-brand3 text-white font-semibold py-2 px-4 rounded-lg">Abrir no YouTube</a>
       </div>`;
     });
 
