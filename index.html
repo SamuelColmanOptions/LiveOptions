@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Live</title>
+  <title>Call Matinal</title>
   <link rel="shortcut icon" href="images/logo.png" type="image/x-icon">
   
   <!-- Tailwind CSS -->
@@ -13,9 +13,9 @@
       theme: {
         extend: {
           colors: {
-            brand:  "#0F2A29",  // tudo brand = #0F2A29
+            brand:  "#0F2A29",
             brand2: "#0F2A29",
-            brand3: "#223739",  // cor antiga pros botões específicos
+            brand3: "#223739",
             texto:  "#FFFFFF"
           },
           boxShadow: {
@@ -32,7 +32,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
 
   <style>
-    /* Header com linha curta */
     .header { width: 100%; padding-top: 1rem; }
     .header-content {
       display: flex;
@@ -41,16 +40,13 @@
       padding-bottom: 1rem;
     }
     .header-line {
-      width: clamp(260px, 55vw, 720px); /* linha responsiva e centralizada */
-      margin: 0.75rem auto 0;
+      width: clamp(260px, 55vw, 720px);
+      margin: 1px auto 0;
       border-bottom: 1px solid rgba(255, 255, 255, 0.22);
     }
-
     .font-logo{ font-family: serif; }
-    .e-comercial{ color: #4EA788; }
     .header-titles-desktop{ font-size: 36px; font-weight: bold; }
     body { font-family: 'Inter', sans-serif; }
-
     .live-indicator::before {
       content: '';
       position: absolute;
@@ -74,11 +70,8 @@
   <!-- Cabeçalho -->
   <header class="header bg-brand">
     <div class="header-content">
-      <!-- LOGO/NOME -->
       <div class="header-titles-desktop text-center">
-        <h1 class="font-logo">
-          Options<br><span class="e-comercial">&</span> Company
-        </h1>
+        <h1 class="font-logo">Call Matinal</h1>
       </div>
     </div>
     <div class="header-line"></div>
@@ -87,7 +80,6 @@
   <!-- Conteúdo Principal -->
   <main class="flex-1">
     <div class="max-w-4xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
-      <!-- Player YouTube/Vídeo -->
       <div class="aspect-video bg-black rounded-2xl overflow-hidden shadow-soft border border-white/10" id="playerWrap">
         <iframe 
           id="liveFrame"
@@ -101,7 +93,7 @@
         </iframe>
       </div>
 
-      <!-- Botões de Ação (mantidos com a cor antiga via brand3) -->
+      <!-- Botões -->
       <div class="mt-8 flex flex-col sm:flex-row justify-center items-center gap-4">
         <a id="btnAbrir" href="#" target="_blank" 
            class="w-full sm:w-auto flex items-center justify-center gap-3 bg-brand3 text-white font-bold py-3 px-6 rounded-lg transition-transform duration-300 hover:scale-105 border border-black/10">
@@ -122,12 +114,27 @@
   </main>
 
   <footer class="bg-brand border-t border-brand2 mt-20">
-    <div class="max-w-6xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-white/70">
-    </div>
+    <div class="max-w-6xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-white/70"></div>
   </footer>
 
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
+
   <script>
-    const LIVE_URL = 'https://www.youtube.com/live/l9jqFie1xIY?si=5TMsEU2xQIs5Rt9b';
+    const firebaseConfig = {
+      apiKey: "AIzaSyAFRVLZ3D61q8ZPg8Rc4vsW2M2HBvsgjVI",
+      authDomain: "linklive-21263.firebaseapp.com",
+      projectId: "linklive-21263",
+      storageBucket: "linklive-21263.firebasestorage.app",
+      messagingSenderId: "844610005512",
+      appId: "1:844610005512:web:e961547220843b6e063fbd",
+      measurementId: "G-2CX1GPW3B8"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    const DOC_PATH = 'linkdata/Lms6k3L6gIKOMmwUSKIU';
 
     function toYouTubeEmbed(u){
       try{
@@ -139,14 +146,9 @@
         }
         if (host.endsWith('youtube.com')){
           const v = url.searchParams.get('v');
-          if (v){
-            return `https://www.youtube-nocookie.com/embed/${v}?rel=0&modestbranding=1`;
-          }
+          if (v) return `https://www.youtube-nocookie.com/embed/${v}?rel=0&modestbranding=1`;
           const liveMatch = url.pathname.match(/\/live\/([A-Za-z0-9_-]{6,})/);
-          if (liveMatch){
-            const id = liveMatch[1];
-            return `https://www.youtube-nocookie.com/embed/${id}?rel=0&modestbranding=1`;
-          }
+          if (liveMatch) return `https://www.youtube-nocookie.com/embed/${liveMatch[1]}?rel=0&modestbranding=1`;
           if (url.pathname.startsWith('/embed/')){
             return `https://www.youtube-nocookie.com${url.pathname}?rel=0&modestbranding=1`;
           }
@@ -155,31 +157,30 @@
       return u;
     }
 
-    const y = document.getElementById('year');
-    if (y) y.textContent = new Date().getFullYear();
+    function setPlayer(url){
+      const frame = document.getElementById('liveFrame');
+      const btn = document.getElementById('btnAbrir');
+      const embed = toYouTubeEmbed(url);
+      frame.src = embed;
+      btn.setAttribute('href', url);
+      window._currentLiveURL = url;
+    }
 
-    document.getElementById('btnAbrir').setAttribute('href', LIVE_URL);
-
-    const EMBED_URL = toYouTubeEmbed(LIVE_URL);
-    const frame = document.getElementById('liveFrame');
-    frame.src = EMBED_URL;
-
-    frame.addEventListener('error', () => {
-      const wrap = document.getElementById('playerWrap');
-      wrap.innerHTML = `<div class="w-full h-full grid place-items-center p-6 text-center text-white/80">
-        A incorporação deste vídeo está bloqueada pelo proprietário no YouTube.<br/>
-        <a href="${LIVE_URL}" target="_blank" class="inline-block mt-4 bg-brand3 text-white font-semibold py-2 px-4 rounded-lg">Abrir no YouTube</a>
-      </div>`;
+    db.doc(DOC_PATH).onSnapshot((doc) => {
+      if (doc.exists) {
+        const data = doc.data();
+        if (data?.url) setPlayer(data.url);
+      }
     });
 
     function copyLink() {
+      const url = window._currentLiveURL || '';
       const textarea = document.createElement('textarea');
-      textarea.value = LIVE_URL;
+      textarea.value = url;
       document.body.appendChild(textarea);
       textarea.select();
       document.execCommand('copy');
       document.body.removeChild(textarea);
-
       const buttonText = document.getElementById('copyButtonText');
       const original = buttonText.innerText;
       buttonText.innerText = 'Link Copiado!';
