@@ -31,51 +31,96 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
 
-  <style>
-    .header { width: 100%; padding-top: 1rem; }
-    .header-content {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding-bottom: 1rem;
-    }
-    .header-line {
-      width: clamp(260px, 55vw, 720px);
-      margin: 1px auto 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.22);
-    }
-    .font-logo{ font-family: serif; }
-    .header-titles-desktop{ font-size: 36px; font-weight: bold; }
-    body { font-family: 'Inter', sans-serif; }
-    .live-indicator::before {
-      content: '';
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      width: 100%; height: 100%;
-      background-color: #ef4444;
-      border-radius: 9999px;
-      animation: pulse 2s infinite;
-      z-index: -1;
-    }
-    @keyframes pulse {
-      0% { transform: translate(-50%, -50%) scale(0.9); opacity: .7; }
-      70% { transform: translate(-50%, -50%) scale(1.5); opacity: 0; }
-      100% { transform: translate(-50%, -50%) scale(0.9); opacity: 0; }
-    }
-  </style>
+<style>
+  .header { 
+    width: 100%; 
+    padding-top: 1rem; 
+  }
+  .header-content {
+    display: flex;
+    justify-content: center; /* centraliza logo + título juntos */
+    align-items: center;
+    padding-bottom: 1rem;
+  }
+  .header-line {
+    width: clamp(260px, 55vw, 720px);
+    margin: 1px auto 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.22);
+  }
+  .font-logo { 
+    font-family: serif; 
+  }
+  .header-titles-desktop { 
+    font-size: 36px; 
+    font-weight: bold; 
+  }
+  body { 
+    font-family: 'Inter', sans-serif; 
+  }
+  html, body {
+  overflow: hidden; /* remove as barras de rolagem */
+  height: 100%;     /* garante que não ultrapasse a tela */
+}
+
+  /* "Logo" em texto */
+  .logo-text {
+    display: flex;
+    flex-direction: column; /* deixa Options em cima e & Company embaixo */
+    font-family: "Playfair Display", serif; /* fonte elegante */
+    font-weight: bold;
+    font-size: 14px; /* ajuste conforme necessário */
+    line-height: 1.2;
+    text-align: right;
+  }
+  .logo-title {
+    font-size: 16px;
+  }
+  .logo-sub {
+    font-size: 14px;
+    font-weight: normal;
+  }
+
+  .live-indicator::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%; height: 100%;
+    background-color: #ef4444;
+    border-radius: 9999px;
+    animation: pulse 2s infinite;
+    z-index: -1;
+  }
+  @keyframes pulse {
+    0% { transform: translate(-50%, -50%) scale(0.9); opacity: .7; }
+    70% { transform: translate(-50%, -50%) scale(1.5); opacity: 0; }
+    100% { transform: translate(-50%, -50%) scale(0.9); opacity: 0; }
+  }
+
+</style>
+
 </head>
 <body class="bg-brand2 text-texto antialiased min-h-screen flex flex-col">
 
   <!-- Cabeçalho -->
-  <header class="header bg-brand">
-    <div class="header-content">
-      <div class="header-titles-desktop text-center">
-        <h1 class="font-logo">Call Matinal</h1>
-      </div>
+<header class="header bg-brand">
+  <div class="header-content">
+    
+    <!-- "Logo" em texto -->
+    <div class="logo-text mr-28">
+      <span class="logo-title">Options</span>
+      <span class="logo-sub"><span style="color: #418D75;">&amp</span> Company</span>
     </div>
-    <div class="header-line"></div>
-  </header>
+
+    <!-- Título -->
+    <div class="header-titles-desktop">
+      <h1 class="font-logo">Call Matinal</h1>
+    </div>
+
+  </div>
+  <div class="header-line"></div>
+</header>
+
 
   <!-- Conteúdo Principal -->
   <main class="flex-1">
